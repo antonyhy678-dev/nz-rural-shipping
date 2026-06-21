@@ -44,25 +44,42 @@ const RURAL_POSTCODES = new Set([
   9871,9872,9873,9874,9875,9876,9877,9878,9879,9880,
 ]);
 
-const RURAL_RATE_NAME = "Rural Delivery (RD)";
-const METRO_RATE_NAME = "Metro Area Only. - NOT rural delivery (RD), see below for RD";
+function normaliseTitle(title) {
+  return String(title ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+function isRuralRate(title) {
+  const normalised = normaliseTitle(title);
+  return normalised.includes("rural delivery") && !normalised.includes("not rural");
+}
+
+function isMetroRate(title) {
+  const normalised = normaliseTitle(title);
+  return normalised.includes("metro area") || normalised.includes("not rural");
+}
 
 /**
  * @param {CartDeliveryOptionsTransformRunInput} input
  * @returns {CartDeliveryOptionsTransformRunResult}
  */
 export function cartDeliveryOptionsTransformRun(input) {
-  const postcode = parseInt(input?.cart?.deliveryGroups?.[0]?.deliveryAddress?.zip ?? "0", 10);
-  const isRural = RURAL_POSTCODES.has(postcode);
-  const rateToHide = isRural ? METRO_RATE_NAME : RURAL_RATE_NAME;
-
   const operations = [];
 
   for (const group of input?.cart?.deliveryGroups ?? []) {
+    const postcode = parseInt(group?.deliveryAddress?.zip ?? "0", 10);
+    const isRural = RURAL_POSTCODES.has(postcode);
+
     for (const option of group?.deliveryOptions ?? []) {
-      if (option.title === rateToHide) {
+      const shouldHide = isRural
+        ? isMetroRate(option.title)
+        : isRuralRate(option.title);
+
+      if (shouldHide) {
         operations.push({
-          hide: { deliveryOptionHandle: option.handle },
+          deliveryOptionHide: { deliveryOptionHandle: option.handle },
         });
       }
     }

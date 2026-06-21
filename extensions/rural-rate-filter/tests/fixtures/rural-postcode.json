@@ -1,0 +1,39 @@
+{
+  "payload": {
+    "export": "cart-delivery-options-transform-run",
+    "target": "cart.delivery-options.transform.run",
+    "input": {
+      "cart": {
+        "deliveryGroups": [
+          {
+            "deliveryAddress": {
+              "zip": "4171"
+            },
+            "deliveryOptions": [
+              {
+                "handle": "metro-rate",
+                "title": "Metro Area Only. - NOT rural delivery (RD), see below for RD"
+              },
+              {
+                "handle": "rural-rate",
+                "title": "Rural Delivery (RD)"
+              }
+            ]
+          }
+        ]
+      },
+      "deliveryCustomization": {
+        "metafield": null
+      }
+    },
+    "output": {
+      "operations": [
+        {
+          "deliveryOptionHide": {
+            "deliveryOptionHandle": "metro-rate"
+          }
+        }
+      ]
+    }
+  }
+}

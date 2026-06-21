@@ -1,4 +1,15 @@
 query CartDeliveryOptionsTransformRunInput {
+  cart {
+    deliveryGroups {
+      deliveryAddress {
+        zip
+      }
+      deliveryOptions {
+        handle
+        title
+      }
+    }
+  }
   deliveryCustomization {
     metafield(namespace: "$app:rural-rate-filter", key: "function-configuration") {
       jsonValue
