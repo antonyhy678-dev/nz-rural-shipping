@@ -1,6 +1,8 @@
 import { useFetcher, useLoaderData } from "react-router";
 import { authenticate } from "../shopify.server";
 
+const RURAL_RATE_FUNCTION_ID = "7addbf01-420c-dc8b-525e-a5839016ec4ed94f4b62";
+
 export const loader = async ({ request }) => {
   await authenticate.admin(request);
   return null;
@@ -12,7 +14,7 @@ export const action = async ({ request }) => {
   const response = await admin.graphql(`
     mutation {
       deliveryCustomizationCreate(deliveryCustomization: {
-        functionId: "019ee277-62d9-748a-8b2d-da51dd23868b",
+        functionId: "${RURAL_RATE_FUNCTION_ID}",
         title: "NZ Rural Rate Filter",
         enabled: true
       }) {
