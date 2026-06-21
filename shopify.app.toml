@@ -2,7 +2,7 @@
 
 client_id = "e30be66200e694a5dbce60d224a0f35c"
 name = "nz-rural-shipping"
-application_url = "https://example.com"
+application_url = "https://nz-rural-shipping-production.up.railway.app"
 embedded = true
 
 [access_scopes]
@@ -45,7 +45,7 @@ api_version = "2026-07"
   topics = [ "app/scopes_update" ]
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
+redirect_urls = [ "https://nz-rural-shipping-production.up.railway.app/auth/callback" ]
 
 [build]
 automatically_update_urls_on_dev = true
