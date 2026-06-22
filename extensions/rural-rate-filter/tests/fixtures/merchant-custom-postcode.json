@@ -7,12 +7,12 @@
         "deliveryGroups": [
           {
             "deliveryAddress": {
-              "zip": "0174"
+              "zip": "6011"
             },
             "deliveryOptions": [
               {
                 "handle": "metro-rate",
-                "title": "Metro Area Only. - NOT rural delivery (RD), see below for RD"
+                "title": "Metro Area Only. - NOT rural delivery (RD)"
               },
               {
                 "handle": "rural-rate",
@@ -26,7 +26,7 @@
         "metafield": {
           "jsonValue": {
             "enabled": true,
-            "ruralPostcodes": ["0174"],
+            "ruralPostcodes": ["6011"],
             "ruralRateKeywords": ["Rural Delivery"],
             "metroRateKeywords": ["Metro Area", "not rural"]
           }

@@ -19,6 +19,11 @@ function isRuralRate(title) {
   return normalised.includes("rural delivery") && !normalised.includes("not rural");
 }
 
+function matchesKeywords(title, keywords) {
+  const normalised = normaliseTitle(title);
+  return keywords.some((keyword) => normalised.includes(normaliseTitle(keyword)));
+}
+
 function isMetroRate(title) {
   const normalised = normaliseTitle(title);
   return normalised.includes("metro area") || normalised.includes("not rural");
@@ -30,17 +35,38 @@ function isMetroRate(title) {
  */
 export function cartDeliveryOptionsTransformRun(input) {
   const operations = [];
+  const configuration = input?.deliveryCustomization?.metafield?.jsonValue;
+
+  if (configuration?.enabled === false) return { operations };
+
+  const configuredPostcodes = Array.isArray(configuration?.ruralPostcodes)
+    ? configuration.ruralPostcodes
+    : null;
+  const ruralPostcodes = configuredPostcodes
+    ? new Set(configuredPostcodes.map((postcode) => String(postcode).padStart(4, "0")))
+    : RURAL_POSTCODES;
+  const ruralKeywords = Array.isArray(configuration?.ruralRateKeywords)
+    ? configuration.ruralRateKeywords
+    : ["rural delivery", "rural shipping"];
+  const metroKeywords = Array.isArray(configuration?.metroRateKeywords)
+    ? configuration.metroRateKeywords
+    : ["metro area", "not rural"];
 
   for (const group of input?.cart?.deliveryGroups ?? []) {
     const postcode = String(group?.deliveryAddress?.zip ?? "")
       .trim()
       .padStart(4, "0");
-    const isRural = RURAL_POSTCODES.has(postcode);
+    const isRural = ruralPostcodes.has(postcode);
 
     for (const option of group?.deliveryOptions ?? []) {
-      const shouldHide = isRural
-        ? isMetroRate(option.title)
-        : isRuralRate(option.title);
+      const shouldHide = configuredPostcodes
+        ? isRural
+          ? matchesKeywords(option.title, metroKeywords)
+          : matchesKeywords(option.title, ruralKeywords) &&
+            !matchesKeywords(option.title, metroKeywords)
+        : isRural
+          ? isMetroRate(option.title)
+          : isRuralRate(option.title);
 
       if (shouldHide) {
         operations.push({

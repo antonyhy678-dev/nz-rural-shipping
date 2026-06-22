@@ -12,7 +12,7 @@
             "deliveryOptions": [
               {
                 "handle": "metro-rate",
-                "title": "Metro Area Only. - NOT rural delivery (RD), see below for RD"
+                "title": "Metro Area Only. - NOT rural delivery (RD)"
               },
               {
                 "handle": "rural-rate",
@@ -25,22 +25,14 @@
       "deliveryCustomization": {
         "metafield": {
           "jsonValue": {
-            "enabled": true,
-            "ruralPostcodes": ["0174"],
-            "ruralRateKeywords": ["Rural Delivery"],
-            "metroRateKeywords": ["Metro Area", "not rural"]
+            "enabled": false,
+            "ruralPostcodes": ["0174"]
           }
         }
       }
     },
     "output": {
-      "operations": [
-        {
-          "deliveryOptionHide": {
-            "deliveryOptionHandle": "metro-rate"
-          }
-        }
-      ]
+      "operations": []
     }
   }
 }
